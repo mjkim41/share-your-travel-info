@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>작업 상세보기</title>
     <style>
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;

@@ -18,9 +18,7 @@
 
         body {
             width: 100%;
-            height: 100vh;
-            overflow: hidden;
-            background: linear-gradient(135deg, #f5af19, #f12711);
+            min-height: 100vh;
         }
 
         ::selection {
@@ -35,6 +33,8 @@
             border-radius: 7px;
             padding: 28px 0 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative; /* 다른 요소들보다 앞에 위치하도록 설정 */
+            z-index: 1;
         }
 
         .task-input {
@@ -244,6 +244,7 @@
                 padding: 0 10px;
             }
 
+
             .wrapper {
                 padding: 20px 0;
             }
@@ -271,11 +272,70 @@
             }
         }
 
+        <%--  배경 화면 ticker 슬라이드쇼 시작!!!!!!!!!!!       --%>
+        body {
+            position: relative; /* 배경화면을 위한 설정 추가 */
+        }
+
+        .slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 180%;
+            height: 100%;
+            display: flex;
+            overflow: hidden; /* 슬라이드가 화면을 벗어나지 않도록 설정 */
+        }
+
+        .slide {
+            width: 60vw; /* 화면 너비의 60%로 이미지 너비 설정 */
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6; /* 배경 이미지의 투명도 적용 */
+        }
+
+        /* 3번 슬라이드에만 적용 */
+        .slideshow .slide:nth-child(3) {
+            background-position: top; /* 상단 부분이 보이도록 설정 */
+        }
+
+
+        /* 애니메이션을 3개의 슬라이드가 60%씩 반복되도록 설정 */
+        @keyframes slideTicker {
+            0% {
+                transform: translateX(0); /* 첫 번째 이미지 */
+            }
+            33.33% {
+                transform: translateX(-60vw); /* 두 번째 이미지 */
+            }
+            66.66% {
+                transform: translateX(-120vw); /* 세 번째 이미지 */
+            }
+            100% {
+                transform: translateX(-180vw); /* 네 번째로 돌아갈 때 첫 번째로 돌아오기 */
+            }
+        }
+
+        .slideshow {
+            animation: slideTicker 30s linear infinite; /* 애니메이션이 30초에 걸쳐 반복 */
+        }
+
+        <%-- 배경 화면 슬라이드쇼 끝  --%>
+
 
     </style>
 </head>
 
 <body>
+<%--!!!!!!!!!!!! 배경화면 ticker 시작--%>
+<div class="slideshow">
+    <div class="slide" style="background-image: url('/images/dw1.jpg');"></div>
+    <div class="slide" style="background-image: url('/images/dw2.jpg');"></div>
+    <div class="slide" style="background-image: url('/images/dw3.jpg');"></div>
+</div>
+
+<%--!!! 배경화면 ticker 끝 !!!!!!!!!!!--%>
 <div class="wrapper">
     <div class="task-input">
         <ion-icon name="create-outline"></ion-icon>
@@ -350,7 +410,6 @@
 
         return await response.json();
     }
-
 
 
     // # 모든 to do fetch 및 렌더링
