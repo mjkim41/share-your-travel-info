@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- mapper 태그로 시작되며, 규칙은 "" 안에 있는 주소의 규칙을 따른다. -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace: 연동할 인터페이스의 풀네임  -->
+<mapper namespace="com.spring.travelInfo.repository.TodoRepository">
+    <!-- [구조]
+          <쿼리종류(insert/select/update/delete)
+                id="@Mapper 클래스의 어떤 메소드가 호출될때 이 쿼리를 실행하 것인가"
+                    (DB의 정보를 추출하여 클라이언트에게 전달할 경우) resultType="DB 내용을 어떤 형태(객체, int 등)로 변환할 것인가"
+           >
+                  쿼리문
+                  (클라이언트에게 메소드의 인자로 받은 값을 사용하려면, #{인자} 혹은 #{인자인 객체의 필드명})
+          </쿼리닫기>
+    -->
+
+
+    <!--  전체 todo 조회-->
+    <select id="findTodos" resultType="Todo">
+        SELECT *
+        FROM todo;
+    </select>
+
+    <!-- todo 생성 -->
+    <insert id="insertNewTodo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO todo
+            (is_completed, task)
+        VALUES
+            (#{isCompleted}, #{task})
+    </insert>
+
+   <!--  id로 todo 조회  -->
+   <!-- useGeneratedKeys: db에서 auto_increment /  keyProperty :  자동 생성된 값을 객체에 전달   -->
+    <select id="selectTodoById" resultType="Todo">
+        SELECT *
+        FROM todo
+        WHERE id = #{id}
+        ;
+    </select>
+
+
+
+
+
+
+</mapper>

@@ -1,7 +1,7 @@
-package com.spring.travelInfo.personalProject.travel.api;
+package com.spring.travelInfo.api;
 
-import com.spring.travelInfo.personalProject.travel.dto.response.flight.FlightWithStatusCheckCode;
-import com.spring.travelInfo.personalProject.travel.entity.Flight;
+import com.spring.travelInfo.dto.response.travel.FlightWithStatusCheckCode;
+import com.spring.travelInfo.entity.Flight;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

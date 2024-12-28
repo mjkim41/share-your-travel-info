@@ -27,9 +27,21 @@ No more digging through your inbox to find your flight details and then visiting
 
 
 ## - ⚙️ Tech Stack with Tools 
- ![](https://velog.velcdn.com/images/kimmy25312/post/8cd20d31-7d4a-4fa2-aa5a-30ec7b7e3f16/image.png)
+ - Dev Setup : <img src="https://img.shields.io/badge/Windows-11-blue?style=flat&logo=windows&logoColor=white"/>
+ <img src="https://img.shields.io/badge/Google%20Chrome-4285F4?style=flat&logo=google-chrome&logoColor=white"/>
+<br>
+
+ - Languages : <img src="https://img.shields.io/badge/Java-ED8B00?style=flat&logo=java&logoColor=white"/>
+<img src="https://img.shields.io/badge/JSP-007396?style=flat&logo=java&logoColor=white"/>
+<br>
+
+ - Tools : 
+<img src="https://img.shields.io/badge/IntelliJ%20IDEA-000000?style=flat&logo=intellij-idea&logoColor=white"/>
+<img src="https://img.shields.io/badge/VS%20Code-1.95.0-0078D4?style=flat&logo=visual-studio-code&logoColor=white"/>
+<img src="https://img.shields.io/badge/Spring-6DB33F?style=flat&logo=spring&logoColor=white"/>
+<img src="https://img.shields.io/badge/Gradle-02303A?style=flat&logo=gradle&logoColor=white"/>
+<img src="https://img.shields.io/badge/Git-F05032?style=flat&logo=git&logoColor=white"/>
 
 
-## - 🔒 Limitations
-- I managed data by hardcoding it into objects, with the intention of transitioning to a database once I gained the necessary knowledge.
-
+## - 🥤 Dependencies Used
+- MyBatis(for JDBC)

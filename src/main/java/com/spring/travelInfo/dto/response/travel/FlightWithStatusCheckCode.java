@@ -1,7 +1,7 @@
-package com.spring.travelInfo.personalProject.travel.dto.response.flight;
+package com.spring.travelInfo.dto.response.travel;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.spring.travelInfo.personalProject.travel.entity.Flight;
+import com.spring.travelInfo.entity.Flight;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

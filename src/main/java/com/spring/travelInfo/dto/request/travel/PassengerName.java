@@ -1,8 +1,7 @@
-package com.spring.travelInfo.personalProject.travel.dto.response.flight;
+package com.spring.travelInfo.dto.request.travel;
 
-import com.spring.travelInfo.personalProject.travel.entity.Flight;
+import com.spring.travelInfo.entity.Flight;
 import lombok.*;
-import org.springframework.stereotype.Controller;
 
 @Getter @Setter @ToString @EqualsAndHashCode @NoArgsConstructor
 public class PassengerName {

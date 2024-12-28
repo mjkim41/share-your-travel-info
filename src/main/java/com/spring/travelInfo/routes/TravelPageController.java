@@ -1,4 +1,4 @@
-package com.spring.travelInfo.personalProject.travel.routes;
+package com.spring.travelInfo.routes;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class TravelPageController {
 
     // 메인 페이지
-    @GetMapping("")
+    @GetMapping
     public String getMainPage() {
-        return "/travel/main";
+        return "/main";
     }
 
     @GetMapping("/flight")
     public String getFlightInfo() {
-        return "/travel/flight";
+        return "/flight";
     }
 
-    @GetMapping("/activities")
+    @GetMapping("/todo")
     public String getActivitiesInfo() {
-        return "/travel/activities";
+        return "/todoList";
     }
 
 

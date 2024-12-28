@@ -1,4 +1,4 @@
-package com.spring.travelInfo.personalProject.travel.entity;
+package com.spring.travelInfo.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Pattern;

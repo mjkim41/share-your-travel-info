@@ -206,7 +206,7 @@
             <h2>No more keyword hunting<span class="mobile-hide"> or chatroom scrolling </span>!</h2>
             <div class="cta-buttons">
                 <div class="cta-button" data-category="flight">Flight Info ✈️</div>
-                <div class="cta-button" data-category="activities">Things to Do 🏖️</div>
+                <div class="cta-button" data-category="todo">Todo List 🧐️</div>
             </div>
 
             <!-- Ticker(화면 오른쪽에서 왼쪽으로 흐르는 애니메이션션) -->
