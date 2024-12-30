@@ -296,9 +296,9 @@
         }
 
         /* 3번 슬라이드에만 적용 */
-        .slideshow .slide:nth-child(3) {
-            background-position: top; /* 상단 부분이 보이도록 설정 */
-        }
+        /*.slideshow .slide:nth-child(3) {*/
+        /*    background-position: top; !* 상단 부분이 보이도록 설정 *!*/
+        /*}*/
 
 
         /* 애니메이션을 3개의 슬라이드가 60%씩 반복되도록 설정 */
@@ -330,9 +330,9 @@
 <body>
 <%--!!!!!!!!!!!! 배경화면 ticker 시작--%>
 <div class="slideshow">
-    <div class="slide" style="background-image: url('/images/dw1.jpg');"></div>
-    <div class="slide" style="background-image: url('/images/dw2.jpg');"></div>
-    <div class="slide" style="background-image: url('/images/dw3.jpg');"></div>
+    <div class="slide" style="background-image: url('/images/ij1.jpg');"></div>
+    <div class="slide" style="background-image: url('/images/ij2.jpg');"></div>
+    <div class="slide" style="background-image: url('/images/ij3.jpg');"></div>
 </div>
 
 <%--!!! 배경화면 ticker 끝 !!!!!!!!!!!--%>

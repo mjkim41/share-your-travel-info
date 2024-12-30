@@ -1,17 +1,13 @@
 package com.spring.travelInfo.api;
 
-import com.spring.travelInfo.dto.response.todo.TodoBasicInfoDto;
+import com.spring.travelInfo.dto.request.todo.TodoSaveRequest;
 import com.spring.travelInfo.entity.Todo;
-import com.spring.travelInfo.repository.TodoRepository;
 import com.spring.travelInfo.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("api/travel/todo")
@@ -29,11 +25,12 @@ public class TodoApiController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveNewTodo(@RequestBody Todo todo) {
-        // save
-        Todo newTodo = todoService.saveNewTodo(todo);
+    public ResponseEntity<?> saveNewTodo(@RequestBody TodoSaveRequest todo) {
+        // save 요청
+        Todo savedTodo = todoService.saveNewTodo(todo);
+
         return ResponseEntity
                 .ok()
-                .body(newTodo);
+                .body(savedTodo);
     }
 }
