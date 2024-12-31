@@ -356,6 +356,8 @@
 
 <script>
 
+    // ==================== 객체 관련 일반 함수 =================//
+
 
     // =============== db 관련 일반 함수 ================= //
     // # List<todos>를 받아서 반환 함수
@@ -383,6 +385,30 @@
             </li>
             `;
         });
+    }
+
+    // # 클릭된 input checkbox의 id 값으로 db에서 해당 행을 조회하여 isCompleted를 현재 상태대로 바꾸고
+    //  todo java 객체의 현재 상태 필드도 바꿔주는 함수
+    async function toggleTodoIsCompleted(checkboxId, isCheckboxChecked) {
+        // - back에 전달하기 위해서 필요한 정보를 객체로 정리해서 만들어줌
+        let updatedTodo = {
+            id: checkboxId,
+            isCompleted: isCheckboxChecked,
+        }
+
+
+        // - back에 변경 요청
+        const response = await fetch(`/api/travel/todo/\${updatedTodo.id}/changeStatus`, {
+                body: JSON.stringify(updatedTodo),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'PUT',
+            }
+        );
+        const modifiedTodo = await response.json();
+
+
     }
 
 
@@ -430,23 +456,55 @@
             let inputText = document.getElementById('new-task-input').value.trim();
             if (!inputText) {
                 // 입력한 내용이 없으면, 내용 입력하라고 알리고 빠져나감
+                document.getElementById('new-task-input').value = ''; // 입력창에서 내용 없애주기
                 $newTaskInput.placeholder = "Please write something🤦‍♂️ and then press Enter"
                 return;
             }
-            // 입력한 내용이 있으면, DB에 Save 후 재렌더링
+            // 입력한 내용이 있으면,
+            //  1) 먼저 placehoder를 원래 내용으로 바꿔주고(위에서 내용 입력안하고 엔터치면 'please write something' 뜨게 해 설정함)
+            document.getElementById('new-task-input').value = ''; // 입력창에서 내용 없애주기
+            $newTaskInput.placeholder = "Add a New Task + Enter";
+            //   DB에 Save 후 재렌더링
             let promise = await saveNewTodo(inputText);
-
-            inputText = ''; // 입력창에서 내용 없애주기
             await fetchAndRenderAllTodos();
         }
     }
+
+    //# todo checkbox 체크 상태에 따라 필요한 작업을 해주는 핸들러 함수
+    function updateCheckboxStatusHandler(e) {
+        // 태그 네임으로 확인 : e.target.tagName (값 대문자로 나옴)!
+        // if ((e.target.tagName !== 'P') && (e.target.tagName !== 'INPUT')) {
+        if (e.target.tagName !== 'INPUT') {
+            return;
+        }
+
+        // input type=checkbox의 체크 상태를 확인(checkbox input의 경우, checked property에서 확인 가능)하여,
+        //   1. todo 객체와 todo DB의 completed 여부 field의 값을 true에서 false로 변환해주기
+        //     - [todo 객체의 isCompleted여부 바꿔주기]
+        //        : todo java 객체에서 해당 객체를 찾아서(input 태그의 id에서 확인 가능)
+        //          해당 객체의 isCompleted를 바꿔주기
+        const isChecked = e.target.checked; // todo 클릭 후 바뀐 checked 여부 확인하여
+        // id 값으로 db에서 행 조회하여 isCompleted 여부 변경하고, db 값에 따 java todo 객체의 필드값도 변경
+        toggleTodoIsCompleted(e.target.id, isChecked)
+
+        //   2. css 바꿔주기
+
+    };
+
 
 
     // ================= 이벤트 리스너 등록 =========== //
     // # 입력창에서 Enter 키 누르면 Todo DB에 등록되는 이벤트
     document.getElementById('new-task-input').addEventListener('keydown', newTaskInputHandler);
 
+    // # Todo 라벨을 클릭하면 Pending/Completed 여부가 바뀌고 그에 따라 css , db 등이 변경되는 이벤트
+    // task-box div 안에서 동적으로 각 task div가 생성됨. task div 안의 input 태그에 id에 DB의 id 값이 적혀 있음
+    const $taskBox = document.querySelector('.task-box');
+    //                                 todo checkbox 체크 상태에 따라 필요한 작업을 해주는 핸들러 함수
+    $taskBox.addEventListener('click', updateCheckboxStatusHandler );
+
     // =============== 초기 실행 함수 ================== //
+    // # 전체 ToDo 목록 렌더링
     fetchAndRenderAllTodos();
 </script>
 </body>

@@ -39,6 +39,15 @@
         ;
     </select>
 
+    <!-- is_completed 수정-->
+    <!--  int updateIsCompletedById(Long id, boolean isCompleted); -->
+    <update id="updateIsCompletedById">
+        UPDATE todo
+        SET is_completed = #{isCompleted}
+        WHERE id = #{id}
+        ;
+    </update>
+
 
 
 
