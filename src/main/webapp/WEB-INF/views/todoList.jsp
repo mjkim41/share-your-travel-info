@@ -155,8 +155,10 @@
             font-size: 17px;
             margin-bottom: 18px;
             padding-bottom: 16px;
-            align-items: flex-start;
-            border-bottom: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;  /* task 요소의 경계선 설정 */
+            display: flex;
+            flex-direction: column;  /* 요소들을 수직으로 배치 */
+            align-items: flex-start;  /* 가로 정렬을 왼쪽으로 설정 */
         }
 
         .task-box .task:last-child {
@@ -165,9 +167,18 @@
             padding-bottom: 0;
         }
 
-        .task-box .task label {
+        .task-box .task .top-row {
             display: flex;
-            align-items: flex-start;
+            justify-content: space-between;  /* label과 settings를 같은 줄에 배치하고 공간을 고르게 분배 */
+            align-items: center;  /* 수직 정렬 */
+            width: 100%;
+        }
+
+        .task label {
+            display: flex;
+            align-items: center;  /* 수직 정렬을 위해 수정 */
+            flex-direction: row;  /* label 내부를 한 줄로 배치 */
+            flex-grow: 1;  /* label이 남은 공간을 차지하도록 설정 */
         }
 
         .task label input {
@@ -185,54 +196,29 @@
             text-decoration: line-through;
         }
 
-        .task-box .settings {
-            position: relative;
-        }
-
-        .settings :where(i) {
+        .task .settings {
+            display: flex;
+            align-items: center;  /* 수직 정렬을 위해 수정 */
+            margin-left: auto;  /* settings를 같은 줄 오른쪽 끝으로 배치 */
             cursor: pointer;
         }
 
-        /*.settings .task-menu {*/
-        /*    position: absolute;*/
-        /*    right: -5px;*/
-        /*    bottom: -65px;*/
-        /*    padding: 5px 0;*/
-        /*    background: #fff;*/
-        /*    border-radius: 4px;*/
-        /*    transform: scale(0);*/
-        /*    transform-origin: top right;*/
-        /*    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);*/
-        /*    transition: transform 0.2s ease;*/
-        /*    z-index: 10;*/
-        /*}*/
-
-        /*.task-box .task:last-child .task-menu {*/
-        /*    bottom: 0;*/
-        /*    transform-origin: bottom right;*/
-        /*}*/
-
-        /*.task-box .task:first-child .task-menu {*/
-        /*    bottom: -65px;*/
-        /*    transform-origin: top right;*/
-        /*}*/
-
-        /*.task-menu.show {*/
-        /*    transform: scale(1);*/
-        /*}*/
-
-        .task-menu i {
-            height: 25px;
-            font-size: 16px;
-            margin-bottom: 2px;
-            padding: 17px 15px;
-            cursor: pointer;
+        .priority-icons {
+            display: flex;
             justify-content: flex-start;
+            margin-top: 5px; /* 아이콘 상단 여백 추가 */
+            padding-top: 5px; /* 줄과의 간격 */
+            padding-left: 25px;
         }
 
-        .settings i:hover {
+        .priority-icon {
+            color: grey;
+        }
+
+        .priority-icon.active {
             color: #346154;
         }
+
 
         @media (max-width: 400px) {
             body {
@@ -360,6 +346,28 @@
         $completedBtn: document.querySelector('.filters #completed'),
     }
 
+    // ====================== 일반 함수 =================== //
+    // # input 태그에 있는 priority dataset의 값에 따라 중요도 아이콘의 색상을 바꿔줌(아이콘의 .active 클래스를 조정함으로써)
+    function changePriorityIconColor(taskElement, priority) {
+        const $priorityIcon1 = taskElement.querySelector('.priority-icon[data-priority="1"]');
+        const $priorityIcon2 = taskElement.querySelector('.priority-icon[data-priority="2"]');
+        const $priorityIcon3 = taskElement.querySelector('.priority-icon[data-priority="3"]');
+
+        // 모든 아이콘의 active 클래스를 제거
+        [$priorityIcon1, $priorityIcon2, $priorityIcon3].forEach(icon => icon.classList.remove('active'));
+
+        // priority 값에 따라 active 클래스를 추가
+        if (priority === '1') {
+            $priorityIcon1.classList.add('active');
+        } else if (priority === '2') {
+            $priorityIcon1.classList.add('active');
+            $priorityIcon2.classList.add('active');
+        } else if (priority === '3') {
+            $priorityIcon1.classList.add('active');
+            $priorityIcon2.classList.add('active');
+            $priorityIcon3.classList.add('active');
+        }
+    }
 
     // =============== db 관련 일반 함수 ================= //
     // # List<todos>를 받아서 반환 함수
@@ -371,31 +379,36 @@
         // 각 todo에 들어가서 html 태그로 만들어줌
         todos.forEach(todo => {
             // html 태그 만들기
-            $taskBox.innerHTML += `
-                 <li class="task">
+            const taskHTML = `
+             <li class="task">
+                <div class="top-row">
                     <label for="\${todo.id}">
-                        <input type="checkbox" id="\${todo.id}" \${todo.isCompleted ? 'checked' : ''}>
-                        <p class="$\{todo.isCompleted ? 'completed' : 'pending'}">\${todo.task}</p>
+                        <input type="checkbox" id="\${todo.id}" \${todo.isCompleted ? 'checked' : ''} data-priority="\${todo.priority}">
+                        <p class="\${todo.isCompleted ? 'completed' : 'pending'}">\${todo.task}</p>
                     </label>
                     <div class="settings">
                         <i class="fa-solid fa-eraser"></i>
                     </div>
-                </li>
-                `;
+                </div>
+                <div class="priority-icons">
+                    <i class="fa-solid fa-star priority-icon" data-priority="1"></i>
+                    <i class="fa-solid fa-star priority-icon" data-priority="2"></i>
+                    <i class="fa-solid fa-star priority-icon" data-priority="3"></i>
+                </div>
+            </li>
+        `;
 
+            // task-box에 추가
+            $taskBox.innerHTML += taskHTML;
 
-            // // 3. checkbox의 체크 여부를 db의 is_completed 조건에 따라 바꿔주기
-            // setTimeout(() => {
-            //     if (todo.id) {
-            //         const $inputCheckbox = $taskBox.querySelector('input[type="checkbox"]');
-            //         $inputCheckbox.checked = todo.isCompleted;
-            //     }
-            // }, 500);
+            // 방금 추가한 task를 선택
+            const $currentTask = $taskBox.lastElementChild;
 
-
+            // input 박스의 priority 값에 따라 아이콘 색을 바꾸는 함수 호출
+            const priority = $currentTask.querySelector('input[type=checkbox]').dataset.priority;
+            changePriorityIconColor($currentTask, priority);
         }); // end of forEach
     } // end of renderTodos()
-
 
     // # 클릭된 input checkbox의 id 값으로 db에서 해당 행을 조회하여 isCompleted를 현재 상태대로 바꾸고
     //  todo java 객체의 현재 상태 필드도 바꿔주는 함수

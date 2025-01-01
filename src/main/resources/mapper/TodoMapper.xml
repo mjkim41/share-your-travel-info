@@ -25,6 +25,7 @@
     <!-- todo 생성 -->
     <insert id="insertNewTodo" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO todo
+            -- ID는 DB에서 AUTOINCREMENT로 생성,priority는 db에서 default 2
             (is_completed, task)
         VALUES
             (#{isCompleted}, #{task})

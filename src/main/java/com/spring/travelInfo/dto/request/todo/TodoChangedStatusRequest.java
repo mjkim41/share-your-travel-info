@@ -19,12 +19,12 @@ public class TodoChangedStatusRequest {
     @JsonProperty("isCompleted")
     private boolean isCompleted;
 
-
-    // 엔터티로 변환하는 메소드
-    public Todo toEntity() {
-        return Todo.builder()
-                .isCompleted(false)
-//                .task(this.task)
-                .build();
-    }
+//
+//    // 엔터티로 변환하는 메소드
+//    public Todo toEntity() {
+//        return Todo.builder()
+//                .isCompleted(false)
+////                .task(this.task) 클라이언트가 준 내용만 전달
+//                .build();
+//    }
 }
