@@ -18,4 +18,7 @@ public interface TodoRepository {
 
     // id로 todo의 is_completed 수정
     int updateIsCompletedById(Long id, boolean isCompleted);
+
+    // is_completed(boolean)값으로 todo 조회
+    List<Todo> selectTodoByIsCompleted(boolean isCompleted);
 }

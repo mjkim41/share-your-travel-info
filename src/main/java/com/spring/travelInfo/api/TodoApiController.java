@@ -25,6 +25,18 @@ public class TodoApiController {
                 .body(todos);
     }
 
+    // # is_completed에 따라 필털이 한 todos 반환
+    // - 클라이언트가 /travel/todo/filter?isCompleted=true혹은false로 요청
+    @GetMapping("/filter") // ! isCompeted=true 부분은 여기서 안 받고 메소드에서 @RequestParam으로 받음!!
+    public ResponseEntity<?> getFilteredTodosByIsCompleted(
+            // @RequestParam : pending 버튼 누르면 false, completed 버튼 누르면 true
+            @RequestParam("isCompleted") boolean isCompleted
+    ) {
+        // 서비스 객체에 db 조회 위임
+        List<Todo> filteredTodos = todoService.getTodosByIsCompleted(isCompleted);
+        return ResponseEntity.ok().body(filteredTodos);
+    }
+
     @PostMapping
     public ResponseEntity<?> saveNewTodo(@RequestBody TodoSaveRequest todo) {
         // save 요청
@@ -46,4 +58,10 @@ public class TodoApiController {
 
         return ResponseEntity.ok().body(foundTodo);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getSelectedTodoById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(todoService.getSelectedTodoById(id));
+    }
+
 }

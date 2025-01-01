@@ -6,6 +6,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%-- 삭제 아이콘 --%>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
     <title>Todo List App</title>
     <style>
 
@@ -186,39 +189,39 @@
             position: relative;
         }
 
-        .settings :where(i, li) {
+        .settings :where(i) {
             cursor: pointer;
         }
 
-        .settings .task-menu {
-            position: absolute;
-            right: -5px;
-            bottom: -65px;
-            padding: 5px 0;
-            background: #fff;
-            border-radius: 4px;
-            transform: scale(0);
-            transform-origin: top right;
-            box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
-            transition: transform 0.2s ease;
-            z-index: 10;
-        }
+        /*.settings .task-menu {*/
+        /*    position: absolute;*/
+        /*    right: -5px;*/
+        /*    bottom: -65px;*/
+        /*    padding: 5px 0;*/
+        /*    background: #fff;*/
+        /*    border-radius: 4px;*/
+        /*    transform: scale(0);*/
+        /*    transform-origin: top right;*/
+        /*    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);*/
+        /*    transition: transform 0.2s ease;*/
+        /*    z-index: 10;*/
+        /*}*/
 
-        .task-box .task:last-child .task-menu {
-            bottom: 0;
-            transform-origin: bottom right;
-        }
+        /*.task-box .task:last-child .task-menu {*/
+        /*    bottom: 0;*/
+        /*    transform-origin: bottom right;*/
+        /*}*/
 
-        .task-box .task:first-child .task-menu {
-            bottom: -65px;
-            transform-origin: top right;
-        }
+        /*.task-box .task:first-child .task-menu {*/
+        /*    bottom: -65px;*/
+        /*    transform-origin: top right;*/
+        /*}*/
 
-        .task-menu.show {
-            transform: scale(1);
-        }
+        /*.task-menu.show {*/
+        /*    transform: scale(1);*/
+        /*}*/
 
-        .task-menu li {
+        .task-menu i {
             height: 25px;
             font-size: 16px;
             margin-bottom: 2px;
@@ -227,16 +230,8 @@
             justify-content: flex-start;
         }
 
-        .task-menu li:last-child {
-            margin-bottom: 0;
-        }
-
-        .settings li:hover {
-            background: #f5f5f5;
-        }
-
-        .settings li i {
-            padding-right: 8px;
+        .settings i:hover {
+            color: #346154;
         }
 
         @media (max-width: 400px) {
@@ -356,36 +351,51 @@
 
 <script>
 
-    // ==================== 객체 관련 일반 함수 =================//
+    // ===================== 전역 변수 ================= //
+    // # 완료여부에 따라 필터링하여 todo 보여주기 버튼 관련
+    const filters = {
+        $filters: document.querySelector('.filters'),
+        $allBtn: document.querySelector('.filters #all'),
+        $pendingBtn: document.querySelector('.filters #pending'),
+        $completedBtn: document.querySelector('.filters #completed'),
+    }
 
 
     // =============== db 관련 일반 함수 ================= //
     // # List<todos>를 받아서 반환 함수
-    function renderAllTodos(todos) {
-        // 태그를 담을 task-box의 기존 내용 초기화
+    function renderTodos(todos) {
+        // 1. 태그를 담을 task-box의 기존 내용 초기화
         const $taskBox = document.querySelector('.task-box');
         $taskBox.innerHTML = '';
-        // 각 todo에 들어가서
+
+        // 각 todo에 들어가서 html 태그로 만들어줌
         todos.forEach(todo => {
             // html 태그 만들기
             $taskBox.innerHTML += `
-             <li class="task">
-                <label for="\${todo.id}">
-                    <input type="checkbox" id="\${todo.id}" \${todo.completed ? 'checked' : ''}>
-                    <p class="\${todo.isCompleted ? 'completed' : 'pending'}">\${todo.task}</p>
-                </label>
-                <div class="settings">
-                    <i class="uil uil-ellipsis-h"></i>
-                    <ul class="task-menu">
-                        <li>
-                            <i class="uil uil-pen"></i>Edit
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            `;
-        });
-    }
+                 <li class="task">
+                    <label for="\${todo.id}">
+                        <input type="checkbox" id="\${todo.id}" \${todo.isCompleted ? 'checked' : ''}>
+                        <p class="$\{todo.isCompleted ? 'completed' : 'pending'}">\${todo.task}</p>
+                    </label>
+                    <div class="settings">
+                        <i class="fa-solid fa-eraser"></i>
+                    </div>
+                </li>
+                `;
+
+
+            // // 3. checkbox의 체크 여부를 db의 is_completed 조건에 따라 바꿔주기
+            // setTimeout(() => {
+            //     if (todo.id) {
+            //         const $inputCheckbox = $taskBox.querySelector('input[type="checkbox"]');
+            //         $inputCheckbox.checked = todo.isCompleted;
+            //     }
+            // }, 500);
+
+
+        }); // end of forEach
+    } // end of renderTodos()
+
 
     // # 클릭된 input checkbox의 id 값으로 db에서 해당 행을 조회하여 isCompleted를 현재 상태대로 바꾸고
     //  todo java 객체의 현재 상태 필드도 바꿔주는 함수
@@ -395,7 +405,6 @@
             id: checkboxId,
             isCompleted: isCheckboxChecked,
         }
-
 
         // - back에 변경 요청
         const response = await fetch(`/api/travel/todo/\${updatedTodo.id}/changeStatus`, {
@@ -407,8 +416,26 @@
             }
         );
         const modifiedTodo = await response.json();
+    }
 
-
+    // @param : eventListner에서 가져온 e.target
+    function handleFilterBtnClick(clickedTag) {
+        switch (clickedTag) {
+            case filters.$pendingBtn:
+                // 완료 여부로 todo db에서 조회해서 렌더링 하는 함수
+                // (선택된 filter 버튼의 id 값이 pending이면 false, completed면 true)
+                fetchAndRenderTodoByIsCompleted(false);
+                break;
+            case filters.$completedBtn:
+                fetchAndRenderTodoByIsCompleted(true);
+                break;
+            // 선택한 버튼이 all 버튼이면, fetchAndRenderAllTodos()로 조회해서 렌더링
+            case filters.$allBtn:
+                fetchAndRenderAllTodos();
+                break;
+            default :
+                break;
+        }
     }
 
 
@@ -443,8 +470,49 @@
         // fetch 하여 json 받아오기
         const allTodos = await fetchAllTodos();
         // 화면에 렌더링 하기
-        renderAllTodos(allTodos);
+        renderTodos(allTodos);
     }
+
+    // # 완료 여부로 to do 필터링 하여 fetch 및 렌더링
+    //  - @param : completed 여부(선택된 filter 버튼의 id 값이 pending이면 false, completed면 true)
+    function fetchAndRenderTodoByIsCompleted(isCompleted) {
+
+        // fetch
+        fetchTodosByIsCompleted(isCompleted);
+        // rendering
+    }
+
+    // # @param : 사용자가 pending 버튼을 누르면 true, completed 버튼을 누르면 false
+    async function fetchTodosByIsCompleted(isCompleted) {
+        // 'api/travel/todo?isCompleted=true/false' 로 이동
+        const response = await fetch(`/api/travel/todo/filter?isCompleted=\${isCompleted}`);
+        console.log(response);
+        const filteredTodos = await response.json();
+        renderTodos(filteredTodos);
+    }
+
+    // # 현재 보고 있는 todo list(completed/pending/all) 확인후,
+    //   그 필터링 조건에 맞는 db만 조회하여 렌더링
+    function renderViewingSession() {
+        // 현재 보고 있는 섹션 = 사용자가 click한 섹션(default : active) = class에 active 붙어있음
+        const $viewingSession = filters.$filters.querySelector('span.active');
+        switch ($viewingSession) {
+            case filters.$completedBtn :
+                // 재 조회 및 렌더링 (선택된 filter 버튼의 id 값이 pending이면 false, completed면 true)
+                fetchAndRenderTodoByIsCompleted(true);
+                break;
+            case filters.$pendingBtn :
+                // 재 조회 및 렌더링 (선택된 filter 버튼의 id 값이 pending이면 false, completed면 true)
+                fetchAndRenderTodoByIsCompleted(false);
+                break;
+            case filters.$allBtn:
+                fetchAndRenderAllTodos();
+                break;
+            default:
+                break;
+        } // switch end
+    }
+
 
     // =============== 이벤트 리스너 함수 ============= //
     // # 입력창에서 Enter 키 누르면 Todo DB에 등록되는 이벤트
@@ -464,14 +532,18 @@
             //  1) 먼저 placehoder를 원래 내용으로 바꿔주고(위에서 내용 입력안하고 엔터치면 'please write something' 뜨게 해 설정함)
             document.getElementById('new-task-input').value = ''; // 입력창에서 내용 없애주기
             $newTaskInput.placeholder = "Add a New Task + Enter";
-            //   DB에 Save 후 재렌더링
+            //   DB에 Save 후
             let promise = await saveNewTodo(inputText);
-            await fetchAndRenderAllTodos();
+            //   현재 compelted를 보고 있으면 completed만 dfb 필터링 하여 재 렌더링
+            //    이런 식으로 보고 있는 화면에 맞는 db 필터링 하여 재 렌더림
+            await renderViewingSession();
         }
     }
 
+
+
     //# todo checkbox 체크 상태에 따라 필요한 작업을 해주는 핸들러 함수
-    function updateCheckboxStatusHandler(e) {
+    async function handleCheckboxStatusChangeHandler(e) {
         // 태그 네임으로 확인 : e.target.tagName (값 대문자로 나옴)!
         // if ((e.target.tagName !== 'P') && (e.target.tagName !== 'INPUT')) {
         if (e.target.tagName !== 'INPUT') {
@@ -485,12 +557,42 @@
         //          해당 객체의 isCompleted를 바꿔주기
         const isChecked = e.target.checked; // todo 클릭 후 바뀐 checked 여부 확인하여
         // id 값으로 db에서 행 조회하여 isCompleted 여부 변경하고, db 값에 따 java todo 객체의 필드값도 변경
-        toggleTodoIsCompleted(e.target.id, isChecked)
+        await toggleTodoIsCompleted(e.target.id, isChecked)
 
         //   2. css 바꿔주기
 
+        // 3. 재 렌더링(예를 들어 completed만 보고 있는데 todo 하나를 pending으로 바꿨으면, 그게 실시간 렌더링 되게)
+        //   - 지금 어떤 filter button이 클릭되어 있느지 확인 후(class에 active 붙은 것), 그 버튼을 눌렀을때의 함수가 실해오디게 하기
+        renderViewingSession();
     };
 
+    // # .filters 태그의 필터링 버튼 누르면 todo 목록이 필터링되어 렌더링 되는 함수
+    function filterTodoHandler(e) {
+        // 둘러싸는 컨테이너를 클릭했을 때에는 이벤트 미발생 (filter는 전역변수로 필터링 관련 dom만 담은 객체)
+        if (e.target === filters.$filters) return;
+
+        // all, completed, pending 중 눌린 버튼이 빨간색으로 바뀜(css)
+        changeFilterBtnColor(e.target);
+
+        // all, completed, pending 버튼 눌렀을 때 실행할 메소드
+        handleFilterBtnClick(e.target);
+
+    }
+
+
+    // # filters 클래스의 all, completed, pending 버튼 중 눌린 버튼이 빨간색으로 바뀜(css)
+    // @Param : e.target
+    function changeFilterBtnColor(clickedTag) {
+        // FILTER 관련 전역 변수 FILTER 객체에 넣어놈
+        // filters 컨테이너에 있는 span(버튼들)가 active 클래스 제거 후(글자색 바뀌는 css)
+        [...filters.$filters.querySelectorAll('span')].forEach($btn => {
+                $btn.classList.remove('active');
+            }
+        )
+        // 선택된 태그만 active 적용하여 css 적용되게 함
+        clickedTag.classList.add('active');
+
+    }
 
 
     // ================= 이벤트 리스너 등록 =========== //
@@ -501,11 +603,25 @@
     // task-box div 안에서 동적으로 각 task div가 생성됨. task div 안의 input 태그에 id에 DB의 id 값이 적혀 있음
     const $taskBox = document.querySelector('.task-box');
     //                                 todo checkbox 체크 상태에 따라 필요한 작업을 해주는 핸들러 함수
-    $taskBox.addEventListener('click', updateCheckboxStatusHandler );
+    $taskBox.addEventListener('click', handleCheckboxStatusChangeHandler);
+
+    // # filter 버튼(completed, all, pending)을 누르면 todo 목록이 필터링 되는 이벤트
+    // filters 관련된 변수는 filters 객체를 만들어서 저장해두었음
+    filters.$filters.addEventListener('click', filterTodoHandler);
+
+    // #  Todo 삭제 버튼(task-box div 안에 동적으로 생성됨) 버튼을 누르면 db에서 삭제하는 이벤트
+
+
 
     // =============== 초기 실행 함수 ================== //
     // # 전체 ToDo 목록 렌더링
     fetchAndRenderAllTodos();
+    // # 상대방과 공유 할 수 있도록, 실시간으로 viewingsession 확인 후 렌더링
+    setInterval((e) => {
+        renderViewingSession()
+    }, 2000);
+
+
 </script>
 </body>
 </html>

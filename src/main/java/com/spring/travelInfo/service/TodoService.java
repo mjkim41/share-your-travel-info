@@ -25,6 +25,12 @@ public class TodoService {
         return todos;
     }
 
+
+    // # id로 조회
+    public Todo getSelectedTodoById(Long id) {
+        return todoRepository.selectTodoById(id);
+    }
+
     public Todo saveNewTodo(TodoSaveRequest todo) {
         // 클라이언트에게 받은 TodoSaveRequest를 Todo Entity로 변환
         Todo todoEntity = todo.toEntity();
@@ -66,5 +72,15 @@ public class TodoService {
         foundTodo.setIsCompleted(todoChangedStatusRequest.isCompleted());
         // 바뀐 Todo 내용을 front에 보내준다.
         return  todoRepository.selectTodoById(todoChangedStatusRequest.getId());
+    }
+
+    /**
+     * 완로여부로 필터링 하여 todos를 반환하는 함수
+     *
+     * @Param : is_completed 값(true or false)
+     */
+    public List<Todo> getTodosByIsCompleted(boolean isCompleted) {
+        // repository에 위임
+       return todoRepository.selectTodoByIsCompleted(isCompleted);
     }
 }

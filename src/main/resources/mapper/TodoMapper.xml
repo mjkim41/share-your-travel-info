@@ -48,6 +48,15 @@
         ;
     </update>
 
+    <!-- is_completed(boolean)값으로 todo 조회 -->
+    <!--  List<Todo> selectTodoByIsCompleted(boolean isCompleted); -->
+    <select id="selectTodoByIsCompleted" resultType="Todo">
+        SELECT *
+        FROM todo
+        WHERE is_completed = #{isCompleted}
+        ;
+    </select>
+
 
 
 
