@@ -9,6 +9,7 @@ import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 
@@ -82,5 +83,22 @@ public class TodoService {
     public List<Todo> getTodosByIsCompleted(boolean isCompleted) {
         // repository에 위임
        return todoRepository.selectTodoByIsCompleted(isCompleted);
+    }
+
+    // # id로 todo 삭제 요청
+    public Todo deleteSelectedTodoById(Long id) {
+
+        // 클라이언트태 어떤 내용 지웠는지 전달해줄 용으로, 삭제 전에 db에서 조회 해주고,
+        //    없는 아이디일 경우 에러 메시지 보내지
+        Todo todo = todoRepository.selectTodoById(id);
+        if (todo == null) {
+            throw new TodoNotFoundException(id + "는 없는 아이디입디다.", HttpStatus.BAD_REQUEST);
+        }
+
+        // db에서 id로 조회 후 삭제 해주기
+        int i = todoRepository.deleteSelectedTodoById(id);
+
+        // 삭제 한 내용 반환.
+        return todo;
     }
 }

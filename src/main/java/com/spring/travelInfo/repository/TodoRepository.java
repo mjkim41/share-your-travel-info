@@ -21,4 +21,7 @@ public interface TodoRepository {
 
     // is_completed(boolean)값으로 todo 조회
     List<Todo> selectTodoByIsCompleted(boolean isCompleted);
+
+    // id로 todo에서 삭제
+    int deleteSelectedTodoById(Long id);
 }

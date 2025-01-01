@@ -57,6 +57,13 @@
         ;
     </select>
 
+    <!-- id 값으로 삭제하여 todo 삭제 -->
+    <delete id="deleteSelectedTodoById">
+        DELETE FROM todo
+        WHERE id = #{id}
+        ;
+    </delete>
+
 
 
 

@@ -64,4 +64,10 @@ public class TodoApiController {
         return ResponseEntity.ok().body(todoService.getSelectedTodoById(id));
     }
 
+    // id 받아서 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteSelectedTodoById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(todoService.deleteSelectedTodoById(id));
+    }
+
 }

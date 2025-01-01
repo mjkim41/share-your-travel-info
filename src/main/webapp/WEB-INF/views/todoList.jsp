@@ -594,6 +594,23 @@
 
     }
 
+    // #  Todo 삭제 버튼(task-box div 안에 동적으로 생성됨) 버튼을 누르면 db에서 삭제하는 이벤트 함수
+    async function handleDeleteTodo(e) {
+        console.log(e.target);
+        // 지우기 버튼 누른 거 아니면 미실행
+        if (!e.target.classList.contains('fa-eraser')) return;
+
+        // 조회할 아이디 : task 컨테이너의 input 박스의 아이디 값로 해서 삭제 요청
+        const $selectedId = e.target.closest('.task').querySelector('input[type=checkbox]').id;
+        await fetch(`/api/travel/todo/\${$selectedId}`, {
+            method: 'DELETE',
+        });
+
+        // 삭제 후 다시 보고 있는 세션(completed, pending, all)의 목록 렌더링
+        renderViewingSession();
+    }
+
+
 
     // ================= 이벤트 리스너 등록 =========== //
     // # 입력창에서 Enter 키 누르면 Todo DB에 등록되는 이벤트
@@ -609,7 +626,9 @@
     // filters 관련된 변수는 filters 객체를 만들어서 저장해두었음
     filters.$filters.addEventListener('click', filterTodoHandler);
 
-    // #  Todo 삭제 버튼(task-box div 안에 동적으로 생성됨) 버튼을 누르면 db에서 삭제하는 이벤트
+    // #  Todo 삭제 버튼(task-box div 안에 동적으로 생성됨) 버튼을 누르면 db에서 삭제하는 이벤트 함수
+    $taskBox.addEventListener('click', handleDeleteTodo);
+
 
 
 
